@@ -128,14 +128,14 @@ RUN echo "export RCUTILS_COLORIZED_OUTPUT=1" >> ~/.bashrc
 # ################ #
 WORKDIR /root/dev_ws
 
-# [TODO] adding your custom packages, uncomment this section and below when you have it
-# ADD dev_ws/src/your/pkg src/your/pkg
+# Add custom packages
+ADD dev_ws/src/minimal_publisher src/minimal_publisher
 
-# building the custom packages
-# RUN source /root/dev_ws/install/setup.bash && \
-#     colcon build --cmake-args '-DCMAKE_BUILD_TYPE=Release' \
-#     '-DPYTHON_EXECUTABLE=/usr/bin/python' \
-#     '-DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.10.so' \
-#     '-DPYTHON_INCLUDE_DIR=/usr/include/python3.10' \
-#     --parallel-workers $(nproc)
-# RUN echo "source /root/dev_ws/install/setup.sh" >> ~/.bashrc
+# Build the custom packages
+RUN source /root/dev_ws/install/setup.bash && \
+    colcon build --cmake-args '-DCMAKE_BUILD_TYPE=Release' \
+    '-DPYTHON_EXECUTABLE=/usr/bin/python' \
+    '-DPYTHON_LIBRARY=/usr/lib/x86_64-linux-gnu/libpython3.10.so' \
+    '-DPYTHON_INCLUDE_DIR=/usr/include/python3.10' \
+    --parallel-workers $(nproc)
+RUN echo "source /root/dev_ws/install/setup.sh" >> ~/.bashrc

@@ -17,7 +17,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
             -e QT_X11_NO_MITSHM=1 -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
             -e NVIDIA_DRIVER_CAPABILITIES=all \
             -v $HOME/.Xauthority:/root/.Xauthority:rw \
-            -v $PWD/dev_ws/src/nerf_custom/collect_data/data:/root/dev_ws/src/nerf_custom/collect_data/data \
             --privileged --runtime=nvidia --gpus all --cap-add=NET_ADMIN \
             --name=$image_name_or_id \
             $image_name_or_id
@@ -27,7 +26,6 @@ if [[ "$OSTYPE" == "linux-gnu"* ]]; then
             -e QT_X11_NO_MITSHM=1 -v /tmp/.X11-unix:/tmp/.X11-unix:rw \
             -e NVIDIA_DRIVER_CAPABILITIES=all \
             -v $HOME/.Xauthority:/root/.Xauthority:rw --cap-add=NET_ADMIN \
-            -v $PWD/dev_ws/src/nerf_custom/collect_data/data:/root/dev_ws/src/nerf_custom/collect_data/data \
             --privileged \
             --name=$image_name_or_id \
             $image_name_or_id
