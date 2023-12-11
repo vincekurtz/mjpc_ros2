@@ -106,8 +106,8 @@ RUN python -m pip install --upgrade pip
 # ################### #
 # python dependencies #
 # ################### #
-COPY requirements_vince.txt ./
-RUN python -m pip install --ignore-installed -r requirements_vince.txt
+COPY requirements.txt ./
+RUN python -m pip install --ignore-installed -r requirements.txt
 
 # cloning the mjpc fork
 # [TODO] specify the branch you want to clone. the branch should include the fix to the install paths.

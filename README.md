@@ -4,7 +4,7 @@ A basic example of integrating MJPC with a ROS2 pipeline.
 
 to build the image (every time you update a local file)
 ```
-docker image build -t mjpc -f Dockerfile.vince .
+docker image build -t mjpc -f Dockerfile.mjpc .
 ```
 
 to start a container with a built image
