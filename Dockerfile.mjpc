@@ -130,6 +130,7 @@ WORKDIR /root/dev_ws
 
 # Add custom packages
 ADD dev_ws/src/minimal_publisher src/minimal_publisher
+ADD dev_ws/src/allegro_mjpc src/allegro_mjpc
 
 # Build the custom packages
 RUN source /root/dev_ws/install/setup.bash && \
