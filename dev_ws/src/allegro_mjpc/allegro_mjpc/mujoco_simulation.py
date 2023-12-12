@@ -4,7 +4,22 @@ import numpy as np
 import rclpy
 from rclpy.node import Node
 
-from std_msgs.msg import String
+from std_msgs.msg import Float64MultiArray, MultiArrayDimension
+
+
+def numpy_to_multiarray(arr: np.ndarray) -> Float64MultiArray:
+    """Converts a numpy array to a Float64MultiArray with the right properties."""
+    multiarray = Float64MultiArray()
+    multiarray.layout.dim = [
+        MultiArrayDimension(
+            label=f"dim{i}",
+            size=arr.shape[i],
+            stride=int(np.prod(arr.shape[i:])),
+        )
+        for i in range(arr.ndim)
+    ]
+    multiarray.data = arr.flatten().tolist()
+    return multiarray
 
 
 class MujocoSimulator(Node):
@@ -25,10 +40,16 @@ class MujocoSimulator(Node):
         # Set up a viewer
         self.viewer = mujoco.viewer.launch_passive(self.model, self.data)
 
-        # Set up a timer that steps the simulation forward
-        timer_period = self.model.opt.timestep
-        self.timer = self.create_timer(timer_period, self.step_simulation)
-        self.i = 0
+        # Set up a timer that steps the simulation forward at a fixed rate
+        self.timer = self.create_timer(self.model.opt.timestep, self.step_simulation)
+
+        # Set up a subscriber for control actions
+        # TODO
+
+        # Set up a publisher for state estimates
+        self.state_est_pub = self.create_publisher(
+            Float64MultiArray, 'allegro_cube_state_estimate', 10
+        )
 
     def step_simulation(self):
         """Step the simulation forward.
@@ -52,8 +73,9 @@ class MujocoSimulator(Node):
             rclpy.shutdown()
 
         # Publish state estimates
-        # TODO
-        print("Stepped simulation: current time {}".format(self.data.time))
+        # Note: right now this includes the state of the "target" cube
+        xhat = np.concatenate([self.data.qpos, self.data.qvel])
+        self.state_est_pub.publish(numpy_to_multiarray(xhat))
 
 
 def main(args=None):
