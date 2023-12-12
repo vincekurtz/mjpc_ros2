@@ -46,12 +46,12 @@ class MujocoSimulator(Node):
         # Set up a subscriber for control actions
         self.ctrl = np.zeros(self.model.nu)
         self.create_subscription(
-            Float64MultiArray, 'allegro_cube_control', self.ctrl_callback, 10
+            Float64MultiArray, 'allegro_cube_control', self.ctrl_callback, 1
         )
 
         # Set up a publisher for state estimates
         self.state_est_pub = self.create_publisher(
-            Float64MultiArray, 'allegro_cube_state_estimate', 10
+            Float64MultiArray, 'allegro_cube_state_estimate', 1
         )
 
     def ctrl_callback(self, msg: Float64MultiArray):

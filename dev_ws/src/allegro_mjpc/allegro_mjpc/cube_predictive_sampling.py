@@ -48,12 +48,12 @@ class PredictiveSampler(Node):
             Float64MultiArray, 
             'allegro_cube_state_estimate', 
             self.state_est_callback, 
-            10
+            1
         )
 
         # Create a publisher for control actions
         self.ctrl_pub = self.create_publisher(
-            Float64MultiArray, 'allegro_cube_control', 10
+            Float64MultiArray, 'allegro_cube_control', 1
         )
 
     def state_est_callback(self, msg: Float64MultiArray):
@@ -63,6 +63,7 @@ class PredictiveSampler(Node):
         with predictive sampling and publish it.
         """
         # Update self.data with the latest state estimates
+        # Note that right now the state includes the floating target cube.
         xhat = np.array(msg.data)
         qpos = xhat[:self.data.qpos.shape[0]]
         qvel = xhat[self.data.qpos.shape[0]:]
@@ -71,7 +72,7 @@ class PredictiveSampler(Node):
 
         # Compute the next best action with predictive sampling
         self.agent.set_state(
-            time=self.data.time,
+            time=self.data.time,  # doesn't seem to matter
             qpos=self.data.qpos,
             qvel=self.data.qvel,
             act=self.data.act,
