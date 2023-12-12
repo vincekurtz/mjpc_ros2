@@ -44,12 +44,19 @@ class MujocoSimulator(Node):
         self.timer = self.create_timer(self.model.opt.timestep, self.step_simulation)
 
         # Set up a subscriber for control actions
-        # TODO
+        self.ctrl = np.zeros(self.model.nu)
+        self.create_subscription(
+            Float64MultiArray, 'allegro_cube_control', self.ctrl_callback, 10
+        )
 
         # Set up a publisher for state estimates
         self.state_est_pub = self.create_publisher(
             Float64MultiArray, 'allegro_cube_state_estimate', 10
         )
+
+    def ctrl_callback(self, msg: Float64MultiArray):
+        """Callback for control actions."""
+        self.ctrl = np.array(msg.data)
 
     def step_simulation(self):
         """Step the simulation forward.
@@ -57,10 +64,8 @@ class MujocoSimulator(Node):
         This is called periodically by the timer, reads the latest control
         action, and publishes state estimates.
         """
-        # Get the latest control action
-        # TODO
-
-        # Step the simulation forward
+        # Step the simulation forward with the latest control action
+        self.data.ctrl = self.ctrl
         mujoco.mj_step(self.model, self.data)
 
         # Sync mouse inputs/etc with the viewer
@@ -83,6 +88,9 @@ def main(args=None):
 
     simulator = MujocoSimulator()
     rclpy.spin(simulator)
+
+    simulator.destroy_node()
+    rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

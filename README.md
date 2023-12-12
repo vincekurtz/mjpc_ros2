@@ -17,7 +17,11 @@ to join an existing container
 bash startup.sh -n mjpc -j
 ```
 
-to run the planner (inside the container)
+to run a demo in simulation
 ```
+# In one terminal inside the container
 ros2 run allegro_mjpc planner
+
+# In another terminal inside the container
+ros2 run allegro_mjpc simulator
 ```
