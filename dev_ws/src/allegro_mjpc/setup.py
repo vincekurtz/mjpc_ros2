@@ -19,6 +19,7 @@ setup(
     entry_points={
         'console_scripts': [
             'planner = allegro_mjpc.cube_predictive_sampling:main',
+            'simulator = allegro_mjpc.mujoco_simulation:main',
         ],
     },
 )
